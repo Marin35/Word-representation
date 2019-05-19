@@ -17,20 +17,19 @@ document = file.read()
 
 lines = preprocess(document)
 lines = tokenization(lines)
-test = lines[:1000]
 
 
-model = Word2Vec(test, size=100, window=5, min_count=1, workers=4)
+model = Word2Vec(lines, size=100, window=5, min_count=1, workers=4)
 print("Training of the Word2Vec is finished.")
 
 model.save("word2vec.model")
 
 
 word2vec_model = Word2Vec.load("word2vec.model")
-
+"""
 # First of all we will do the replacement with UNK.
 
-unk_test, real_words = predict_unk.replace_with_unknown(test)
+unk_test, real_words = predict_unk.replace_with_unknown(lines)
 
 # We have now the train set.
 
@@ -71,8 +70,8 @@ Y_pred = NN_model.predict(X_test)
 accuracy = compute_accuracy(Y_test, Y_pred)
 
 df['LSTM enhancement'] = predict_unk.prediction_neighbor_with_pos(unk_test, word2vec_model, NN_model)
+"""
 
+df_sim = evaluation.spearman(word2vec_model)  # Evaluation of the Spearman ranking
 
-df_sim = evaluation.spearman(word2vec_model)
-
-df_analogy = evaluation.analogy(word2vec_model)
+df_analogy = evaluation.analogy(word2vec_model)  # Evaluation of the analogy

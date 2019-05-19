@@ -13,14 +13,13 @@ def spearman(model):
 
     # Apply the similarity function to each row
     df_test = df_sim.copy()  # Test dataframe
-    df_test = df_test.iloc[:3, :]
     df_test['Similarity'] = df_test.apply(lambda row: model.wv.similarity(row['Word 1'], row['Word 2']),
                                           axis=1)
 
     spearman_rank = spearmanr(df_test['Human (mean)'], df_test['Similarity']).correlation
     df_test['Spearman'] = spearman_rank
     print("Spearman ranking between similarities is finished. Value is " + str(spearman_rank))
-
+    df_test.to_csv('new_wordsim353.csv')
     return df_test
 
 
@@ -37,11 +36,12 @@ def analogy(model):
     df_analogy = df_analogy.applymap(lambda s: s.lower() if type(s) == str else s)  # Convert to lowercase
 
     df_test = df_analogy.copy()  # Get the test dataframe
-    df_test = df_test.iloc[19529:19531, :]
 
     # For each line, we find the analogy and we write in the column prediction.
     df_test['Prediction'] = df_test.apply(lambda row: model.most_similar(positive=[row['Word 2'], row['Analogy 1']],
                                                                          negative=[row['Word 1']])[0][0], axis=1)
     print("Computation of the analogies is finished.")
 
+    # Save the dataframe created
+    df_test.to_csv('new_questions-word.txt')
     return df_test
