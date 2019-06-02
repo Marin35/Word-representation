@@ -17,6 +17,6 @@ pip install -r requirements.txt
 ```
 
 ## Files structure
-The library contains the following files:
+Please have a look at the Jupyter Notebook for a description of the strucuture of the repository.
 
 
